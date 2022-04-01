@@ -2,6 +2,8 @@
 #include <cstring>
 #include <algorithm>
 #include <fstream>
+#include <bits/stdc++.h>
+
 
 using namespace std;
 
@@ -16,7 +18,6 @@ int main(){
   bool stillgoing = true;
   char input[100];
   int *heap;
-
   heap = new int[100];
 
   for (int i = 0; i < 100; i++){
@@ -48,14 +49,33 @@ int main(){
 
     else if (strcmp(input, "FILE") == 0) {
 
-      fileadd(heap);
+      addfile(heap);
       
     }
 
     else if (strcmp(input, "DELETE") == 0) {
 
-      // delete function (friday)
+      int g;
       
+      cout << "Enter the number you would like to delete: ";
+
+      cin >> g;
+
+      for (int i = 0; i < 100; i++) {
+
+	if (heap[i] != NULL) {
+
+	  if (heap[i] == g){
+
+	    heap[i] = NULL;
+
+	    sort(heap, heap + 100, greater<int>());
+
+	  }
+
+	}
+
+      }
 
     }
 
@@ -68,11 +88,13 @@ int main(){
 
     else if (strcmp(input, "DISPLAY") == 0) {
 
+      // develop tree
+      
       for (int i = 0; i < 100; i++) {
 
 	if (heap[i] != NULL){
 
-	  cout << heap[i] << endl;
+	  cout << heap[i] << " " << i << endl;
 
 	}
 
@@ -112,14 +134,22 @@ void addmanually(int num, int *heap){
 
 }
 
-void fileadd(int *heap){
+void addfile(int *heap){
 
+  cout << "reading in numbers from file..." << endl;
   
+  ifstream inputfile("numbers.txt");
   
   for (int i = 0; i < 100; i++){
 
-    // FRIDAY GRIND
+    if (heap[i] == NULL) {
+      
+      inputfile >> heap[i];
 
+    }
   }
 
+  sort(heap, heap + 100, greater<int>());
+
 }
+
