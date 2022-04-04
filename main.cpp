@@ -9,6 +9,8 @@ using namespace std;
 
 void addmanually(int num, int *heap);
 void addfile(int* heap); // WORK ON THIS FRIDAY
+void swapper(int* &heap, int size, int position);
+void heapmaker(int* &heap, int size);
 
 
 int main(){
@@ -22,7 +24,7 @@ int main(){
 
   for (int i = 0; i < 100; i++){
 
-    heap[i] = NULL;
+    heap[i] = 0;
 
   }
 
@@ -63,11 +65,11 @@ int main(){
 
       for (int i = 0; i < 100; i++) {
 
-	if (heap[i] != NULL) {
+	if (heap[i] != 0) {
 
 	  if (heap[i] == g){
 
-	    heap[i] = NULL;
+	    heap[i] = 0;
 
 	    sort(heap, heap + 100, greater<int>());
 
@@ -89,12 +91,24 @@ int main(){
     else if (strcmp(input, "DISPLAY") == 0) {
 
       // develop tree
+      int size = 0;
+      for (int i = 0; i < 100; i++) {
+
+	if (heap[i] != 0) {
+
+	  size++;
+	  
+	}
+
+      }
+      
+      heapmaker(heap, size);
       
       for (int i = 0; i < 100; i++) {
 
-	if (heap[i] != NULL){
+	if (heap[i] != 0){
 
-	  cout << heap[i] << " " << i << endl;
+	  cout << heap[i] << " " << endl;
 
 	}
 
@@ -119,7 +133,7 @@ void addmanually(int num, int *heap){
   
   for (int i = 0; i < 100; i++){
 
-    if (heap[i] == NULL){
+    if (heap[i] == 0){
 
       heap[i] = num;
       break;
@@ -129,9 +143,21 @@ void addmanually(int num, int *heap){
   }
 
   // sorting method learned here: https://www.tutorialkart.com/cpp/cpp-sort-integer-array/#:~:text=C%2B%2B%20Program%20%E2%80%93%20Sort%20Integer%20Array%20To%20sort,%28%29%20as%20third%20argument%20to%20sort%20%28%29%20function.
+  
+  // sort(heap, heap + 100, greater<int>());
 
-  sort(heap, heap + 100, greater<int>());
+  int size = 0;
+  
+  for (int i = 0; i < 100; i++){
 
+    if (heap[i] != 0){
+      size++;
+    }
+  }
+    
+  
+  heapmaker(heap, size);
+  
 }
 
 void addfile(int *heap){
@@ -142,7 +168,7 @@ void addfile(int *heap){
   
   for (int i = 0; i < 100; i++){
 
-    if (heap[i] == NULL) {
+    if (heap[i] == 0) {
       
       inputfile >> heap[i];
 
@@ -153,3 +179,54 @@ void addfile(int *heap){
 
 }
 
+void swapper(int* &heap, int size, int position){
+  
+  int largest = position; // assume parent is the largest first
+
+  int leftchild = (position * 2) + 1;
+  int rightchild = (position * 2) + 2;
+
+  // start by comparing left child first
+
+  if (heap[leftchild] > heap[position]){
+
+    largest = leftchild;
+
+  }
+
+  // if right child is even bigger than left
+  
+  if (heap[rightchild] > heap[position]){
+
+    largest = rightchild;
+
+  }
+
+  // if after these 2 if statements largest changed, swap the values
+
+  if (largest != position) {
+
+    swap(heap[largest], heap[position]);
+
+    cout << heap[largest] << endl;
+    cout << heap[position] << endl;
+
+    swapper(heap, size, largest);
+
+  }
+  
+}
+
+void heapmaker(int* &heap, int size){
+  
+  // first non-leaf node from the bottom, then work way up
+
+  int nonleaf = (size/2) - 1;
+
+  for (int i = nonleaf; i >= 0; i--) {
+    
+    swapper(heap, size, i);
+
+  }
+  
+}
